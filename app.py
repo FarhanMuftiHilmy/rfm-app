@@ -137,7 +137,7 @@ if authentication_status:
         dfsql["Monetary"] = dfsql["sales"]
         return dfsql
     dfsql = get_data_from_csv()
-    print("Dataframe from sql: ", dfsql["sales"])
+    # print("Dataframe from sql: ", dfsql["sales"])
 
 
 
@@ -177,6 +177,7 @@ if authentication_status:
         st.sidebar.title(f"Welcome {name}")
     logout(name, authenticator)
     st.sidebar.header("Please Filter here:")
+    @st.cache_data
     def filterDashboard(dfsql: pd.DataFrame):
         tahun = st.sidebar.multiselect(
             "Select the year: ",
@@ -205,26 +206,26 @@ if authentication_status:
         )
         return bulan,dfsql_selection
     bulan, dfsql_selection = filterDashboard(dfsql)
-    print("Raw Dataframe: ", dfsql_selection)
+    # print("Raw Dataframe: ", dfsql_selection)
     
  
    
-    print("""MINIMUM DATE
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -""", "DONE")
+    # print("""MINIMUM DATE
+    # -
+    # -
+    # -
+    # -
+    # -
+    # -
+    # -
+    # -
+    # -
+    # -
+    # -
+    # -
+    # -
+    # -
+    # -""", "DONE")
 
     # st.dataframe(dfsql_selection)
 
@@ -240,6 +241,7 @@ if authentication_status:
 
             # print ('Count rows with negative values of UnitPrice: ' + str(count_neg_sales))
             # print ('Count rows with negative values of Quantity: ' + str(count_neg_quantity))
+        @st.cache_data
         def runDataPreprocessingStep():
             neg_quantity_and_price = dfsql_selection[(dfsql_selection['Quantity'] < 0) |
                                             (dfsql_selection['UnitPrice'] < 0)].index
@@ -262,6 +264,7 @@ if authentication_status:
             return dfsql_rfm
         dfsql_rfm = runDataPreprocessingStep()
 
+        @st.cache_data
         def showKPI():
             total_sales = int((dfsql_selection["UnitPrice"]*dfsql_selection["Quantity"]).sum())
             average_sale_by_transaction = round((dfsql_selection["UnitPrice"]*dfsql_selection["Quantity"]).mean(), 2)
@@ -277,7 +280,7 @@ if authentication_status:
         showKPI()
         
 
-              
+        @st.cache_data      
         def showLineChart():
             if len(dfsql_selection["bulan"].unique()) == 1 and len(dfsql_selection["tahun"].unique()) == 1:
                 sales_by_date = dfsql_selection.groupby(['tanggal']).agg({'sales': 'sum'}).reset_index()
@@ -327,7 +330,7 @@ if authentication_status:
         # csv = convert_df_raw_data(dfsql_selection)
         # st.download_button('Download Dataframe of Raw Data as CSV', csv, 'raw_data_dataframe.csv', 'text/csv')
 
-
+        @st.cache_data
         def runModelDevelopment(dfsql_rfm):
             data = dfsql_rfm[['Recency','Frequency','Monetary']]
             k_means = KMeans(n_clusters=3, random_state=42)
@@ -376,7 +379,7 @@ if authentication_status:
             right_column.plotly_chart(fig_rfm_score_pie, use_container_width=True)
             return dfsql_rfm
         dfsql_rfm = runModelDevelopment(dfsql_rfm)
-
+        @st.cache_data
         def filter_dataframe(df: pd.DataFrame, key_name: str) -> pd.DataFrame:
             modify = st.checkbox("Add filters", key=f"{key_name}")
             if not modify:
@@ -519,7 +522,7 @@ if authentication_status:
 
 
         #-----------------------------SUMMARY JUMLAH TRANSAKSI, PELANGGAN, DAN SALES [LINE CHART]-----------------------------
-        summary_by_month = dfsql_selection.groupby(['bulan']).agg({'JumlahPelanggan': 'count', 'JumlahTransaksi': 'nunique', 'sales': 'sum'}).reset_index()
+        # summary_by_month = dfsql_selection.groupby(['bulan']).agg({'JumlahPelanggan': 'count', 'JumlahTransaksi': 'nunique', 'sales': 'sum'}).reset_index()
         # print("Summary Per Bulan:", summary_by_month)
 
 
