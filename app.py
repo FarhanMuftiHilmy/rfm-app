@@ -374,7 +374,6 @@ if authentication_status:
             return dfsql_rfm
         dfsql_rfm = runModelDevelopment(dfsql_rfm)
 
-        @st.cache_data
         def filter_dataframe(df: pd.DataFrame, key_name: str) -> pd.DataFrame:
             modify = st.checkbox("Add filters", key=f"{key_name}")
             if not modify:
