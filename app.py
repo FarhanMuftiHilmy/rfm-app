@@ -26,16 +26,16 @@ import numpy as np
 
 st.set_page_config(page_title="RFM Dashboard Analysis", page_icon="📈", layout="wide")
 
-@st.cache_data
-def getUser():
-    mysqldb_conn= mc.connect(host="localhost",user="root",password="hilmy148",database="db_rfm")
-    get_users_query = "SELECT * FROM users"
-    cursor = mysqldb_conn.cursor()
-    cursor.execute(get_users_query)
-    rows = cursor.fetchall()  
-    cursor.close()
-    mysqldb_conn.close()
-    return rows
+# @st.cache_data
+# def getUser():
+#     mysqldb_conn= mc.connect(host="localhost",user="root",password="hilmy148",database="db_rfm")
+#     get_users_query = "SELECT * FROM users"
+#     cursor = mysqldb_conn.cursor()
+#     cursor.execute(get_users_query)
+#     rows = cursor.fetchall()  
+#     cursor.close()
+#     mysqldb_conn.close()
+#     return rows
 # credentials = {"usernames":{}}
 # users = getUser()
 # for username, password, name in users:
